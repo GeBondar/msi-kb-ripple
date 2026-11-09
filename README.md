@@ -17,7 +17,7 @@ For MSI laptops with the 24-zone *MysticLight MS-1603* backlight (built on a Swo
 ## Install
 
 ```powershell
-git clone <this repo> msi-kb-ripple
+git clone https://github.com/GeBondar/msi-kb-ripple
 cd msi-kb-ripple
 powershell -ExecutionPolicy Bypass -File install.ps1
 ```
