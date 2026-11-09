@@ -56,3 +56,5 @@ The controller has 24 zones, not per-key LEDs. Older docs describe it as 4 zones
 Only two packets are ever sent: *zone select* and *mode/colour* on feature report 2. Both come from [OpenRGB](https://gitlab.com/CalcProgrammer1/OpenRGB) and [LightShow](https://github.com/th3r00t/lightshow). The controller exposes report IDs 3–8 too, but they are deliberately left alone, because a malformed packet has [bricked a similar MSI backlight](https://github.com/Askannz/msi-perkeyrgb/issues/24). Use at your own risk.
 
 🤖 Setting this up with an AI agent? Point it at [AGENTS.md](AGENTS.md).
+
+MIT licensed, see [LICENSE](LICENSE).
