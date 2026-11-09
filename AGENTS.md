@@ -50,32 +50,45 @@ If "all red" isn't the whole keyboard, the zone count differs. Go to step 3.
 
 ## 4. Install
 
+Two effects: `ripple` (water rings from each key press, the default) and
+`fire` (hearth fire, typing stokes it). Ask the user which one they want.
+
 ```powershell
-powershell -ExecutionPolicy Bypass -File install.ps1
+powershell -ExecutionPolicy Bypass -File install.ps1               # ripple
+powershell -ExecutionPolicy Bypass -File install.ps1 -Effect fire  # fire
 ```
 
-This adds the Startup shortcut `MSI Keyboard Ripple.lnk` (runs `pythonw`, no window)
-and starts the effect. A single-instance mutex prevents duplicates. If you
-change code, run `stop-ripple.cmd` and start it again, or the old copy keeps running.
+This adds the Startup shortcut `MSI Keyboard Ripple.lnk` (runs `pythonw`, no
+window), stops any running effect and starts the chosen one. Re-run with the
+other `-Effect` to switch. Both effects share one mutex, so only one drives the
+LEDs. If you change code, run `stop-ripple.cmd` (stops either effect) and start
+it again, or the old copy keeps running.
 
 ## 5. Tune with the user
 
-Run in a visible terminal while iterating: `python ripple.py` (Ctrl+C restores
-white). Map their feedback to knobs at the top of `ripple.py`:
+Run in a visible terminal while iterating: `python ripple.py` or `python fire.py`
+(Ctrl+C restores white). Stop the background copy first with
+`stop-ripple.cmd`. Map their feedback to knobs at the top of the script:
 
-| User says | Change |
-|---|---|
-| "too fast" / "too slow" | `SPEED`, `LIFE` |
-| "fades too slowly" | raise `RELEASE` (≤ 0.4), lower `TAIL` |
-| "it flickers" | lower `RELEASE`, raise `BG` a bit; avoid multiple echo rings |
-| "too dim" / "low contrast" | raise `GAIN`, darken `BG` |
+| User says | `ripple.py` | `fire.py` |
+|---|---|---|
+| "too fast" / "too slow" | `SPEED`, `LIFE` | `SWAY` |
+| "fades too slowly" | raise `RELEASE` (≤ 0.4), lower `TAIL` | raise `RELEASE` |
+| "it flickers" | lower `RELEASE`, raise `BG` a bit; avoid multiple echo rings | lower `FLICKER`, `RELEASE` |
+| "too dim" | raise `GAIN`, darken `BG` | raise `COAL`, `FLAME`, brighten `RAMP` |
+| "more dynamic" | higher `SPEED` | raise `LICK`, `SWAY`, `GUST`, `SPARKS` |
+| "more red" / "more yellow" | — | lower / raise `HEAT` |
+
+If everything is dim regardless, the hardware backlight level is low: ask the
+user to press Fn + F10.
 
 Writes themselves don't flicker (verified). Flicker always comes from the
 animation, i.e. repeated pulses or a too-dark background.
 
 ## Files
 
-`ripple.py` engine + key hook · `msikb.py` HID driver · `install.ps1` /
+`ripple.py` water effect + zone map + key hook · `fire.py` fire effect (reuses
+`ripple.py`'s map and hook) · `msikb.py` HID driver · `install.ps1` /
 `uninstall.ps1` / `stop-ripple.cmd` · `tools/show.py` zone painter ·
-`tools/make_demo.py` renders `docs/demo.gif` · `tools/probe.py`, `map24.py`,
+`tools/make_demo.py` renders `docs/demo.gif` and `docs/fire.gif` · `tools/probe.py`, `map24.py`,
 `flicker_test.py` were used for the original reverse engineering.
