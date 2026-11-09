@@ -1,0 +1,2 @@
+hidapi>=0.14
+pillow>=10  # only for tools/make_demo.py
